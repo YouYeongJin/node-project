@@ -1,0 +1,11 @@
+{
+  "name": "node-project",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "rm -rf build && cd ./frontend && npm run build && cd ../backend && npm run build",
+    "all-start": "cd ./build/frontend && npm start && cd ../backend/bin && node www",
+    "react-start": "cd ./build/frontend && npm start",
+    "express-start": "cd ./build/backend/bin && node www"
+  }
+}
