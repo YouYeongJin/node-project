@@ -5,18 +5,18 @@ import mybatisMapper from 'mybatis-mapper';
 const pool = mysql.createPool(mysql_config);
 
 pool.on('acquire', function (connection:any) {
-  console.log(`Connection ${connection.threadId} acquired`);
+  console.log(`*커넥션 스레드ID : ${connection.threadId} 연결*`);
 });
 
 pool.on('enqueue', function () {
-  console.log('Waiting for available connection slot');
+  console.log('*커넥션 대기 중*');
 });
 
 pool.on('release', function (connection:any) {
-  console.log(`Connection ${connection.threadId} released`);
+  console.log(`*커넥션 스레드ID : ${connection.threadId} 반환*`);
 });
 
-const getConn = function(queryParam:any, callback:any) {
+const getConn = function(next:any, queryParam:any, callback:any) {
   // 매퍼 로드는 처음에 한번만 하면될꺼같은데 어디다 할까
   // mybatisMapper.createMapper(['']);
   mybatisMapper.createMapper(['../mapper/login.xml']);
@@ -30,12 +30,11 @@ const getConn = function(queryParam:any, callback:any) {
                                                 queryParam.params,
                                                 format);
   
-  console.log(readyQuery);                  
-
   pool.getConnection(function(err:any, connection:any) {
     if(err){
-      throw new Error('에러입니다.');
+      next(err);
     }else{
+      console.log(readyQuery);
       callback(err, readyQuery, connection);
     }
   });

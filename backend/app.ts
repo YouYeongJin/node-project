@@ -29,9 +29,16 @@ app.use(function(err:any, req:any, res:any, next:any) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  console.log('------------------------------------');
+  console.log(err.message);
+  console.log('------------------------------------');
+
+  // 에러처리방식 1번
+  // res.status(err.status || 500);
+  // res.render('error');
+
+  // 에러처리방식 2번
+  res.status(500).send(err.message);
 });
 
 export = app;

@@ -1,30 +1,33 @@
 import * as db from '../db_config/mysql_pool';
 
-const index = (req:any, res:any) => {
+const index = (req:any, res:any, next:any) => {
+
+  /*파라메터 설정 부분 
+  nameSpace = XML의 네임스페이스
+  sqlId = XML의 쿼리명
+  params = 조건파라메터
+  */
   let params:any = {nameSpace:'login',
                     sqlId:'index',
                     params: {common:'1'} };
-  db.getConn(params,
+
+  //DB쿼리 보내는 부분                  
+  db.getConn(next,
+            params,
             (err:any, readyQuery:any, connection:any)=>{
               if(err){
                 console.log(err);
-                console.log('연결 실패');
               }
               
-              console.log('연결 성공');
               connection.query(readyQuery, (err:any, result:any, field:any)=>{
                 if(err){
                   console.log(err);
-                  console.log('쿼리 실패');
                 }
-
-                console.log('쿼리 성공');
+                connection.release();
                 res.json(result);
               });
               
             });
-            
-  res.json({'하이':'후후'});
 }
 
 export {index}
