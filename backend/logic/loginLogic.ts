@@ -19,7 +19,7 @@ const index = (req:any, res:any) => {
                 }
 
                 console.log('쿼리 성공');
-                console.log(result);
+                res.json(result);
               });
               
             });

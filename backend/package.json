@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "build": "tsc && cp -r ./node_modules ../build/backend/node_modules/ && cp -r ./mapper ../build/backend/mapper/"
+    "build": "tsc && cp -r ./node_modules ../build/backend && cp -r ./mapper ../build/backend"
   },
   "dependencies": {
     "@types/cookie-parser": "^1.4.2",
