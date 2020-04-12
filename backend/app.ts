@@ -2,14 +2,15 @@ import createError from 'http-errors';
 import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
-import logger from 'morgan';
+import morgan from 'morgan';
+import logger from './config/log_config/logger'
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+import indexRouter from './routes/index';
+import usersRouter from './routes/users';
 
 const app = express();
 
-app.use(logger('dev'));
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -29,9 +30,9 @@ app.use(function(err:any, req:any, res:any, next:any) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  console.log('------------------------------------');
-  console.log(err.message);
-  console.log('------------------------------------');
+  logger.error('------------------------------------');
+  logger.error(err.message);
+  logger.error('------------------------------------');
 
   // 에러처리방식 1번
   // res.status(err.status || 500);

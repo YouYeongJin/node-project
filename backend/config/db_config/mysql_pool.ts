@@ -1,25 +1,25 @@
 import mysql from 'mysql';
 import mysql_config from './config';
 import mybatisMapper from 'mybatis-mapper';
+import logger from '../log_config/logger'
 
 const pool = mysql.createPool(mysql_config);
 
 pool.on('acquire', function (connection:any) {
-  console.log(`*커넥션 스레드ID : ${connection.threadId} 연결*`);
+  logger.info(`*커넥션 스레드ID : ${connection.threadId} 연결*`);
 });
 
 pool.on('enqueue', function () {
-  console.log('*커넥션 대기 중*');
+  logger.info('*커넥션 대기 중*');
 });
 
 pool.on('release', function (connection:any) {
-  console.log(`*커넥션 스레드ID : ${connection.threadId} 반환*`);
+  logger.info(`*커넥션 스레드ID : ${connection.threadId} 반환*`);
 });
 
 const getConn = function(next:any, queryParam:any, callback:any) {
   // 매퍼 로드는 처음에 한번만 하면될꺼같은데 어디다 할까
-  // mybatisMapper.createMapper(['']);
-  mybatisMapper.createMapper(['../mapper/login.xml']);
+  mybatisMapper.createMapper(['../mapper/'+queryParam.nameSpace+'.xml']);
 
   // 디폴트 포멧으로 설정
   const format:any = {language: 'sql', indent: '  '};
@@ -30,12 +30,12 @@ const getConn = function(next:any, queryParam:any, callback:any) {
                                                 queryParam.params,
                                                 format);
   
-  pool.getConnection(function(err:any, connection:any) {
+  pool.getConnection((err:any, connection:any)=>{
     if(err){
       next(err);
     }else{
-      console.log(readyQuery);
-      callback(err, readyQuery, connection);
+      logger.info(readyQuery);
+      callback(err, connection, readyQuery);
     }
   });
 }

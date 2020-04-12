@@ -7,6 +7,7 @@
 import app from '../app';
 import debug from 'debug';
 import http from 'http';
+import logger from '../config/log_config/logger';
 
 /**
  * Get port from environment and store in Express.
@@ -65,11 +66,11 @@ function onError(error:any) {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+      logger.error(bind + ' requires elevated privileges');
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
+      logger.error(bind + ' is already in use');
       process.exit(1);
       break;
     default:
@@ -87,5 +88,5 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + port;
   debug('Listening on ' + bind);
-  console.log('서버 올라갔습니다. ' + bind);
+  logger.info('서버 올라갔습니다. ' + bind);
 }

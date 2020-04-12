@@ -1,6 +1,7 @@
-import * as db from '../db_config/mysql_pool';
+import * as db from '../config/db_config/mysql_pool';
+import logger from '../config/log_config/logger'
 
-const index = (req:any, res:any, next:any) => {
+const index = (req:any, res:any, next:any)=>{
 
   /*파라메터 설정 부분 
   nameSpace = XML의 네임스페이스
@@ -14,14 +15,14 @@ const index = (req:any, res:any, next:any) => {
   //DB쿼리 보내는 부분                  
   db.getConn(next,
             params,
-            (err:any, readyQuery:any, connection:any)=>{
+            (err:any, connection:any, readyQuery:any)=>{
               if(err){
-                console.log(err);
+                logger.error(err);
               }
               
               connection.query(readyQuery, (err:any, result:any, field:any)=>{
                 if(err){
-                  console.log(err);
+                  logger.error(err);
                 }
                 connection.release();
                 res.json(result);

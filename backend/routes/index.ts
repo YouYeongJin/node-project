@@ -7,4 +7,4 @@ router.get('/', function(req:any, res:any, next:any) {
   loginLogic.index(req, res, next);
 });
 
-export = router;
+export default router
