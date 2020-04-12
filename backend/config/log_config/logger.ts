@@ -11,7 +11,7 @@ const options = {
   // log파일
   file: {
     level: 'info',
-    filename: `./logs/project.log`, // 로그파일을 남길 경로
+    filename: __dirname+`/logs/project.log`, // 로그파일을 남길 경로
     handleExceptions: true,
     json: false,
     maxsize: 5242880, // 5MB
