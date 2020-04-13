@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "build": "tsc && cp -r ./node_modules ../build/backend && cp -r ./mapper ../build/backend"
+    "build": "tsc && cp -r ./node_modules ../build/backend && cp -r ./mapper ../build/backend",
+    "win-build": "tsc && xcopy node_modules ..\\build\\backend\\node_modules /e /y /i && xcopy mapper ..\\build\\backend\\mapper /e /y /i"
   },
   "dependencies": {
     "@types/cookie-parser": "^1.4.2",
