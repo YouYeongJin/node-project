@@ -12,7 +12,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {Link as RLink} from 'react-router-dom';
+import ReactDOM from 'react-dom';
+import axios from 'axios';
+
+import SignUp from './SignUp';
 
 function Copyright() {
   return (
@@ -88,11 +91,19 @@ export default function SignIn() {
             label="Remember me"
           />
           <Button
-            type="submit"
+            // type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={()=>{
+              axios({
+                url: 'http://localhost:5000',
+                method: 'get'
+              }).then((res)=>{
+                alert(res.data[0].USER_ID + '   :   ' + res.data[0].USER_PW);
+              });
+            }}
           >
             Sign In
           </Button>
@@ -103,7 +114,9 @@ export default function SignIn() {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link component="button" variant="body2" onClick={()=>{
+                ReactDOM.render(<SignUp />, document.getElementById('root'));  
+              }}>
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>

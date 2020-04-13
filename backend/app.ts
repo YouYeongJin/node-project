@@ -3,7 +3,8 @@ import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
-import logger from './config/log_config/logger'
+import cors from 'cors';
+import logger from './config/log_config/logger';
 
 import indexRouter from './routes/index';
 import usersRouter from './routes/users';
@@ -15,6 +16,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+// CROS DOMAIN 허용
+app.use(cors());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
