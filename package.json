@@ -5,8 +5,10 @@
   "scripts": {
     "react-build": "cd ./frontend && npm run build",
     "express-build": "cd ./backend && npm run build",
-    "all-win-build": "del /s /q build && cd frontend && npm run win-build && cd ../backend && npm run win-build",
     "all-build": "rm -rf build && cd ./frontend && npm run build && cd ../backend && npm run build",
+    "win-react-build": "cd ./frontend && npm run win-build",
+    "win-express-build": "cd ./backend && npm run win-build",
+    "all-win-build": "del /s /q build && cd frontend && npm run win-build && cd ../backend && npm run win-build",
     "all-start": "cd ./build/frontend && npm start && cd ../backend/bin && node www",
     "react-start": "cd ./build/frontend && npm start",
     "express-start": "cd ./build/backend/bin && node www"
