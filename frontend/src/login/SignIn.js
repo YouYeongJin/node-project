@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -52,6 +52,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
   const classes = useStyles();
+  
+  const [userId, setUserId] = useState('');
+  const [userPassword, setUserPassword] = useState('');
 
   return (
     <Container component="main" maxWidth="xs">
@@ -69,22 +72,22 @@ export default function SignIn() {
             margin="normal"
             required
             fullWidth
-            id="email"
             label="Email Address"
-            name="email"
             autoComplete="email"
             autoFocus
+            onChange={(e)=>{setUserId(e.target.value)}}
+            value={userId}
           />
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            name="password"
             label="Password"
             type="password"
-            id="password"
             autoComplete="current-password"
+            onChange={(e)=>{setUserPassword(e.target.value)}}
+            value={userPassword}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -98,10 +101,18 @@ export default function SignIn() {
             className={classes.submit}
             onClick={()=>{
               axios({
-                url: 'http://localhost:5000',
-                method: 'get'
+                url: 'http://localhost:5000/login/checkLogin',
+                method: 'post',
+                data: {USER_ID:userId,
+                      USER_PW:userPassword}
               }).then((res)=>{
-                alert(res.data[0].USER_ID + '   :   ' + res.data[0].USER_PW);
+                console.log(res.data[0]);
+                if(res.data[0]){
+                  alert('성공');
+                }
+                else{
+                  alert('실패');
+                }
               });
             }}
           >

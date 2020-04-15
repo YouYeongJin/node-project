@@ -6,7 +6,9 @@
   <select id = "index">
     SELECT *
     FROM TB_USER
-    WHERE 1=#{common}
+    WHERE 1 = 1
+    AND USER_ID = #{USER_ID}
+    AND USER_PW = #{USER_PW}
   </select>
 
 </mapper>
