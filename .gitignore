@@ -5,3 +5,5 @@ backend/node_modules/
 
 .DS_Store
 .vscode
+frontend/.package-lock
+backend/.package-lock
