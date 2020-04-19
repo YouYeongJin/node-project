@@ -16,6 +16,7 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 
 import SignUp from './SignUp';
+import DashBoard from '../main/DashBoard';
 
 function Copyright() {
   return (
@@ -56,6 +57,24 @@ export default function SignIn() {
   const [userId, setUserId] = useState('');
   const [userPassword, setUserPassword] = useState('');
 
+  const checkLogin = ()=>{
+    axios({
+      url: 'http://localhost:5000/login/checkLogin',
+      withCredentials: true,
+      method: 'post',
+      data: {USER_ID:userId,
+            USER_PW:userPassword}
+    }).then((res)=>{
+      if(res.data[0]){
+        alert('성공');
+        ReactDOM.render(<DashBoard />, document.getElementById('root'));
+      }
+      else{
+        alert('실패');
+      }
+    });
+  }
+  
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -88,33 +107,22 @@ export default function SignIn() {
             autoComplete="current-password"
             onChange={(e)=>{setUserPassword(e.target.value)}}
             value={userPassword}
+            onKeyPress={async (e)=>{
+              if(e.charCode===13) {
+                await checkLogin();
+              }
+            }}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
           <Button
-            // type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={()=>{
-              axios({
-                url: 'http://localhost:5000/login/checkLogin',
-                method: 'post',
-                data: {USER_ID:userId,
-                      USER_PW:userPassword}
-              }).then((res)=>{
-                console.log(res.data[0]);
-                if(res.data[0]){
-                  alert('성공');
-                }
-                else{
-                  alert('실패');
-                }
-              });
-            }}
+            onClick={checkLogin}
           >
             Sign In
           </Button>
@@ -125,8 +133,8 @@ export default function SignIn() {
               </Link>
             </Grid>
             <Grid item>
-              <Link component="button" variant="body2" onClick={()=>{
-                ReactDOM.render(<SignUp />, document.getElementById('root'));  
+              <Link href="#" variant="body2" onClick={(e)=>{
+                ReactDOM.render(<SignUp />, document.getElementById('root'));
               }}>
                 {"Don't have an account? Sign Up"}
               </Link>
