@@ -29,10 +29,10 @@ app.disable("x-powered-by");
 // 세선 없으면 튕김
 app.use('(?!/login/checkLogin)', (req:any, res:any, next:any)=>{
   if(!req.session.userId){
-    logger.info(' 인터셉터 : 세션 없음.....X');
-    res.status(500).send('세션 없음!');
+    res.json({code  : '999',
+              msg   : 'noSession'});
+    // res.status(500).send('errorrrrr');
   }else{
-    logger.info(' 인터셉터 : 세션 있음.....O');
     next();
   }
 });

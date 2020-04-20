@@ -10,9 +10,7 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 
-import axios from 'axios';
-import ReactDOM from 'react-dom';
-import SignIn from '../login/SignIn';
+import {getAxios} from '../common/common';
 // import SignUp from '../login/SignUp';
 
 export const mainListItems = (
@@ -76,21 +74,21 @@ export const secondaryListItems = (
         <AssignmentIcon />
       </ListItemIcon>
       <ListItemText primary="세션삭제" onClick={()=>{
-        axios({
-          url: 'http://localhost:5000/login/deleteSession',
-          withCredentials: true,
-          method: 'post',
-          data: {}
-        }).then((res)=>{
-          if(res.data.success){
-            console.log(res.data.success);
-            alert('성공');
-            // ReactDOM.render(<SignIn />, document.getElementById('root'));
-          }
-          else{
-            alert('실패');
-          }
-        });
+        getAxios('post',
+                'http://localhost:5000/login/deleteSession',
+                {},
+                (res)=>{
+                  if(res.data.success){
+                    alert('성공');
+                  }
+                  else{
+                    alert('실패');
+                  }
+                },
+                (err)=>{
+                  console.log('1-1');
+                  alert(err);
+                });
       }} />
     </ListItem>
     <ListItem button>
@@ -98,21 +96,21 @@ export const secondaryListItems = (
         <AssignmentIcon />
       </ListItemIcon>
       <ListItemText primary="액션" onClick={()=>{
-        axios({
-          url: 'http://localhost:5000/login/noSessionRequest',
-          withCredentials: true,
-          method: 'post',
-          data: {}
-        }).then((res)=>{
-          console.log(res.data.success);
-          if(res.data.success){
-            alert('세션있음');
-          }
-          else{
-            alert('세션없음');
-            ReactDOM.render(<SignIn />, document.getElementById('root'));
-          }
-        });
+        getAxios('post',
+                'http://localhost:5000/login/noSessionRequest',
+                {},
+                (res)=>{
+                  console.log(res.data.success);
+                  if(res.data.success){
+                    alert('세션있음111');
+                  }
+                  else{
+                    alert('세션없음111');
+                  }
+                },
+                (err)=>{
+                  alert(err);
+                });
       }} />
     </ListItem>
   </div>

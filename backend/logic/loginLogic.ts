@@ -29,7 +29,7 @@ const checkLogin = (req: any, res: any, next: any)=>{
         connection.release();
         
         //로그인 처리 세션 처리
-        if(result[0].USER_ID){
+        if(result[0]){
           req.session.userId = result[0].USER_ID;
         }
         res.send(result);
