@@ -24,7 +24,7 @@ const getConn = (next:any, callback:any)=>{
       logger.error(err);
       next(err);
     }else{
-      callback(err, connection);
+      callback(connection);
     }
   });
 }
