@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import ReactDOM from 'react-dom';
-import axios from 'axios';
+import {getAxios} from '../common/common';
 
 import SignUp from './SignUp';
 import DashBoard from '../main/DashBoard';
@@ -58,21 +58,22 @@ export default function SignIn() {
   const [userPassword, setUserPassword] = useState('');
 
   const checkLogin = ()=>{
-    axios({
-      url: 'http://localhost:5000/login/checkLogin',
-      withCredentials: true,
-      method: 'post',
-      data: {USER_ID:userId,
-            USER_PW:userPassword}
-    }).then((res)=>{
-      if(res.data[0]){
-        alert('성공');
-        ReactDOM.render(<DashBoard />, document.getElementById('root'));
-      }
-      else{
-        alert('실패');
-      }
-    });
+    getAxios('post',
+            'http://localhost:5000/login/checkLogin',
+            {USER_ID:userId, USER_PW:userPassword},
+            (res)=>{
+              if(res.data[0]){
+                alert('성공');
+                ReactDOM.render(<DashBoard />, document.getElementById('root'));
+              }
+              else{
+                alert('실패');
+              }
+            },
+            (err)=>{
+              console.log(err);
+              alert(err);
+            });
   }
   
   return (

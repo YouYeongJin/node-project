@@ -16,15 +16,17 @@ const checkLogin = (req: any, res: any, next: any)=>{
 
   //DB쿼리 보내는 부분
   db.getConn(next,
-    params,
-    (err:any, connection:any, readyQuery:any)=>{
+    (err:any, connection:any)=>{
       if (err) {
         logger.error(err);
+        next(err);
       }
 
-      connection.query(readyQuery, (err:any, result:any, field:any)=>{
+      //getReadyQuery > 1. next고정 2. params(line 11) 3. callbackFunction자리 null이면 호출 x
+      connection.query(db.getReadyQuery(next, params, null), (err:any, result:any, field:any)=>{
         if (err) {
           logger.error(err);
+          next(err);
         }
         connection.release();
         
