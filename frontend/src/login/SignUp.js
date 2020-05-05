@@ -128,7 +128,7 @@ export default function SignUp() {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link component="button" variant="body2" onClick={()=>{
+              <Link component="button" variant="body2" onClick={(e)=>{
                 ReactDOM.render(<SignIn />, document.getElementById('root'));
               }}>
                 Already have an account? Sign in

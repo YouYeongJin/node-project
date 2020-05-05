@@ -27,6 +27,7 @@ const getConn = (next:any, callback:any)=>{
       callback(connection);
     }
   });
+  
 }
 
 const getReadyQuery = (next:any, queryParam:any, callback:any)=>{
@@ -46,10 +47,13 @@ const getReadyQuery = (next:any, queryParam:any, callback:any)=>{
   
     if(callback){
       callback();
+    }else{
+      return readyQuery;
     }
   } catch (err) {
     next(err);
   }
+
 }
 
 export {pool, getConn, getReadyQuery}

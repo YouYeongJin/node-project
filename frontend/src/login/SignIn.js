@@ -134,7 +134,7 @@ export default function SignIn() {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2" onClick={(e)=>{
+              <Link component="button" variant="body2" onClick={(e)=>{
                 ReactDOM.render(<SignUp />, document.getElementById('root'));
               }}>
                 {"Don't have an account? Sign Up"}

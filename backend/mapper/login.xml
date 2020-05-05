@@ -3,7 +3,7 @@
 
 <mapper namespace="login">
   
-  <select id = "index">
+  <select id = "loginCheck">
     SELECT *
     FROM TB_USER
     WHERE 1 = 1
