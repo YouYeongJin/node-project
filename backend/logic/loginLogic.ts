@@ -1,44 +1,40 @@
 import * as db from '../config/db_config/mysql_pool';
 import logger from '../config/log_config/logger';
 
-const checkLogin = (req: any, res: any, next: any)=>{
+const checkLogin:Function = async (req: any, res: any, next: any)=>{
+  try {
 
-  /*파라메터 설정 부분 
-  nameSpace = XML의 네임스페이스
-  sqlId = XML의 쿼리명
-  params = 조건파라메터
-  */
-  let params: any = {
-    nameSpace: 'login',
-    sqlId: 'loginCheck',
-    params: req.body
-  };
+    //  파라메터 설정 부분 1. nameSpace = XML의 네임스페이스 2. sqlId = XML의 쿼리명 3. params = 조건파라메터
+    let params:any = {
+      nameSpace: 'login',
+      sqlId: 'loginCheck',
+      params: {
+              USER_ID : req.body.USER_ID,
+              USER_PW : req.body.USER_PW
+              }
+    };
 
-  //DB쿼리 보내는 부분
-  db.getConn(next, (connection:any)=>{
+    const conn = await db.getConn(next);
+
+    const queryStr = await db.getReadyQuery(params);
+
+    let userData = await db.getData(conn, queryStr);
     
-      //getReadyQuery > 1. next고정 2. params(line 11) 3. callbackFunction자리 null이면 호출 x
-      let queryStr = db.getReadyQuery(next, params, null);
-
-      connection.query(queryStr, (err:any, result:any, field:any)=>{
-        if (err) {
-          logger.error(err);
-          next(err);
-        }
-        connection.release();
-        
-        //로그인 처리 세션 처리
-        if(result[0]){
-          req.session.userId = result[0].USER_ID;
-        }
-        res.send(result);
-      });
-      
-    });
+    conn.release();
     
+    //세션에 추가
+    req.session.userId = userData[0].USER_ID;
+    res.send(userData);
+
+  } catch (err) {
+    logger.error("-checkLogin-")
+    logger.error(err);
+    next(err);
   }
+
+}
   
-const deleteSession = (req:any, res:any, next:any)=>{
+const deleteSession:Function = (req:any, res:any, next:any)=>{
   
   req.session.destroy();
   logger.info('deleteSession' + '>> 세션삭제성공');
@@ -46,7 +42,7 @@ const deleteSession = (req:any, res:any, next:any)=>{
   res.json({success : true});
 }
 
-const noSessionRequest = (req:any, res:any, next:any)=>{
+const noSessionRequest:Function = (req:any, res:any, next:any)=>{
   
   if(req.session.userId){
     logger.info('noSessionRequest' + '>> 세션 있음 O');
