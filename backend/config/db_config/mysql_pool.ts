@@ -56,7 +56,7 @@ const getReadyQuery:Function = (queryParam:any) => {
 
     try {
       // 매퍼 로드는 처음에 한번만 하면될꺼같은데 어디다 할까
-      mybatisMapper.createMapper(['../mapper/'+queryParam.nameSpace+'.xml']);
+      mybatisMapper.createMapper([__dirname+'/../../mapper/'+queryParam.nameSpace+'.xml']);
       
       // 디폴트 포멧으로 설정
       const format:any = {language: 'sql', indent: '  '};
