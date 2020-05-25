@@ -2,8 +2,6 @@ import mysql from 'mysql';
 import mysql_config from './config';
 import mybatisMapper from 'mybatis-mapper';
 import logger from '../log_config/logger'
-import { promises } from 'dns';
-import { error } from 'winston';
 
 const pool = mysql.createPool(mysql_config);
 
@@ -34,7 +32,6 @@ const getConn:Function = () => {
         logger.error(err);
         reject(err);
       }else{
-        logger.error("-getConnection-");
         resolve(connection);
       }
     });
@@ -66,9 +63,9 @@ const getReadyQuery:Function = (queryParam:any) => {
       
       // 파라메타 Namespace, SQL ID, Parameters as a arguments.
       readyQuery = mybatisMapper.getStatement(queryParam.nameSpace,
-        queryParam.sqlId,
-        queryParam.params,
-        format);
+                                              queryParam.sqlId,
+                                              queryParam.params,
+                                              format);
         
       } catch (err) {
         logger.error("-getReadyQuery-");
