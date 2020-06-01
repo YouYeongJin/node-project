@@ -5,7 +5,7 @@ const checkLogin:Function = async (req: any, res: any, next: any)=>{
   try {
 
     //  파라메터 설정 부분 1. nameSpace = XML의 네임스페이스 2. sqlId = XML의 쿼리명 3. params = 조건파라메터
-    let params:any = {
+    let params = {
       nameSpace: 'login',
       sqlId: 'loginCheck',
       params: {
@@ -14,7 +14,7 @@ const checkLogin:Function = async (req: any, res: any, next: any)=>{
               }
     };
 
-    const conn = await db.getConn(next);
+    const conn = await db.getConn();
 
     const queryStr = await db.getReadyQuery(params);
 

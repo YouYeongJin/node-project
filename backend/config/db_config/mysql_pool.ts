@@ -22,7 +22,7 @@ pool.on('release', (connection:any) => {
  * @param next 에러처리를 위한 next
  * @param callback connection이 담긴 callback
  */
-const getConn:Function = () => {
+const getConn: Function = () => {
 
   return new Promise((resolve, reject) => {
     
@@ -48,7 +48,9 @@ const getConn:Function = () => {
  * sqlId = XML의 쿼리명           
  * params = 쿼리 내에서 사용될 parameters
  */
-const getReadyQuery:Function = (queryParam:any) => {
+const getReadyQuery: Function = (queryParam:{nameSpace: string,
+                                            sqlId: string,
+                                            params: {}}) => {
 
   return new Promise((resolve, reject) => {
 
@@ -59,7 +61,7 @@ const getReadyQuery:Function = (queryParam:any) => {
       mybatisMapper.createMapper([__dirname+'/../../mapper/'+queryParam.nameSpace+'.xml']);
       
       // 디폴트 포멧으로 설정
-      const format:any = {language: 'sql', indent: '  '};
+      const format: {} = {language: 'sql', indent: '  '};
       
       // 파라메타 Namespace, SQL ID, Parameters as a arguments.
       readyQuery = mybatisMapper.getStatement(queryParam.nameSpace,
@@ -84,11 +86,11 @@ const getReadyQuery:Function = (queryParam:any) => {
  * @param queryString mybatis에서 받아온 queryString
  * @param connection DB커넥션 
  */
-const getData:any = (connection:any, queryString:String) => {
+const getData: Function = (connection: any, queryString: string) => {
 
   return new Promise((resolve, reject) => {
 
-    connection.query(queryString, (err:any, result:any, field:any)=>{
+    connection.query(queryString, (err: any, result: {}, field: any)=>{
       
       if (err) {
         logger.error("-getData-");
@@ -104,4 +106,45 @@ const getData:any = (connection:any, queryString:String) => {
 
 }
 
-export {pool, getConn, getReadyQuery, getData}
+const asyncGetConn: Function = (next: any, callback: Function)=>{
+  
+  pool.getConnection((err:any, connection:any)=>{
+    if(err){
+      logger.error(err);
+      next(err);
+    }else{
+      callback(connection);
+    }
+  });
+  
+}
+
+const asyncGetReadyQuery: Function | string = (next: any, queryParam: {nameSpace: string,
+                                                    sqlId: string,
+                                                    params: {}}, callback: Function)=>{
+
+  try {
+    // 매퍼 로드는 처음에 한번만 하면될꺼같은데 어디다 할까
+     mybatisMapper.createMapper(['../mapper/'+queryParam.nameSpace+'.xml']);
+  
+     // 디폴트 포멧으로 설정
+     const format:any = {language: 'sql', indent: '  '};
+   
+     // 파라메타 Namespace, SQL ID, Parameters as a arguments.
+     const readyQuery = mybatisMapper.getStatement(queryParam.nameSpace,
+                                                   queryParam.sqlId,
+                                                   queryParam.params,
+                                                   format);
+  
+    if(callback){
+      callback();
+    }else{
+      return readyQuery;
+    }
+  } catch (err) {
+    next(err);
+  }
+
+}
+
+export {pool, getConn, getReadyQuery, getData, asyncGetConn, asyncGetReadyQuery}
