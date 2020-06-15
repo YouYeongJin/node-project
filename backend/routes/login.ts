@@ -1,7 +1,7 @@
 import express from "express";
 import * as loginLogic from "../logic/loginLogic";
 import logger from "../config/log_config/logger";
-import { NextFunction } from "connect";
+import { NextFunction } from "express";
 
 const router = express.Router();
 

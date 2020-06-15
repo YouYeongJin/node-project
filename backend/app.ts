@@ -9,7 +9,7 @@ import session from "express-session";
 
 import logger from "./config/log_config/logger";
 import lgoinRouter from "./routes/login";
-import { NextFunction } from "connect";
+import { NextFunction } from "express";
 
 const app = express();
 

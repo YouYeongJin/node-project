@@ -2,7 +2,6 @@ import mysql from "mysql";
 import mysql_config from "./mysql_config";
 import mybatisMapper from "mybatis-mapper";
 import logger from "../log_config/logger";
-import { NextFunction } from "connect";
 
 const pool = mysql.createPool(mysql_config);
 
@@ -89,18 +88,18 @@ const getData: Function = (connection: mysql.Connection, queryString: string) =>
     });
 };
 
-const asyncGetConn: Function = (next: NextFunction, callback: Function) => {
+const asyncGetConn: Function = (callback: Function) => {
     pool.getConnection((err: Error, connection: mysql.Connection) => {
         if (err) {
             logger.error(err);
-            next(err);
+            throw new Error("asyncGetConn error");
         } else {
             callback(connection);
         }
     });
 };
 
-const asyncGetReadyQuery: Function | string = (next: NextFunction, queryParam: { nameSpace: string; sqlId: string; params: {} }, callback: Function) => {
+const asyncGetReadyQuery: Function | string = (queryParam: { nameSpace: string; sqlId: string; params: {} }, callback: Function) => {
     try {
         // 매퍼 로드는 처음에 한번만 하면될꺼같은데 어디다 할까
         mybatisMapper.createMapper(["../mapper/" + queryParam.nameSpace + ".xml"]);
@@ -117,7 +116,8 @@ const asyncGetReadyQuery: Function | string = (next: NextFunction, queryParam: {
             return readyQuery;
         }
     } catch (err) {
-        next(err);
+        logger.error(err);
+        throw new Error("asyncGetReadyQuery error");
     }
 };
 
