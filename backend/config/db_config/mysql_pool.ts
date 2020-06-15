@@ -1,5 +1,5 @@
 import mysql from "mysql";
-import mysql_config from "./config";
+import mysql_config from "./mysql_config";
 import mybatisMapper from "mybatis-mapper";
 import logger from "../log_config/logger";
 import { NextFunction } from "connect";
