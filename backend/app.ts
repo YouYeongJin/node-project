@@ -1,71 +1,60 @@
-import createError from "http-errors";
-import express, { Router } from "express";
-import path from "path";
-import cookieParser from "cookie-parser";
-import morgan from "morgan";
-import cors from "cors";
-import redis from "./config/redis_config/redis";
-import session from "express-session";
+// import app from "../app";
+import express from "express";
+//const loaders = require("./loaders");
+import loaders from "./loaders/index";
+import debug from "debug";
+import http, { Server } from "http";
+import logger from "./loaders/config/log_config/logger";
 
-import logger from "./config/log_config/logger";
-import lgoinRouter from "./routes/login";
-import { NextFunction } from "express";
+let port: string | number;
+let server: Server;
 
-const app = express();
+global.__rootPath = __dirname;
 
-app.use(morgan("dev"));
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-// CROS DOMAIN 허용
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
-// 쿠키 설정
-app.use(cookieParser("yjhj0729"));
-// 세션 설정
-app.use(session(redis));
-app.use(express.static(path.join(__dirname, "public")));
-// 보안
-app.disable("x-powered-by");
+const serverStart = async () => {
+    const app = express();
+    await loaders.init({ expressApp: app });
+    port = normalizePort(process.env.PORT || "5000");
+    app.set("port", port);
+    server = http.createServer(app);
+    server.on("error", onError);
+    server.on("listening", onListening);
+    server.listen(port);
+};
+serverStart();
 
-// 세선 없으면 튕김
-app.use("(?!/login/checkLogin)", (req: any, res: any, next: NextFunction) => {
-    if (!req.session.userId) {
-        res.json({ code: "999", msg: "noSession" });
-        // res.status(500).send('errorrrrr');
-    } else {
-        next();
+function normalizePort(val: any) {
+    let port = parseInt(val, 10);
+    if (isNaN(port)) {
+        return val;
     }
-});
+    if (port >= 0) {
+        return port;
+    }
+    return false;
+}
 
-// 라우터 위치
-app.use("/login", lgoinRouter);
+function onError(error: any) {
+    if (error.syscall !== "listen") {
+        throw error;
+    }
+    let bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
+    switch (error.code) {
+        case "EACCES":
+            logger.info(bind + " requires elevated privileges");
+            process.exit(1);
+            break;
+        case "EADDRINUSE":
+            logger.info(bind + " is already in use");
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
+}
 
-// 뒤로가기 대응 index.html호출
-app.get("*", (req: any, res: any) => {
-    logger.info(path.join(__dirname + "/index.html"));
-    res.sendFile(path.join(__dirname + "/index.html"));
-});
-
-// catch 404 and forward to error handler
-app.use(function(req: any, res: any, next: NextFunction) {
-    next(createError(404));
-});
-
-// error handler
-app.use(function(err: any, req: any, res: any, next: NextFunction) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get("env") === "development" ? err : {};
-
-    logger.error("------------------------------------");
-    logger.error(err.message);
-    logger.error("------------------------------------");
-
-    // 에러처리방식 1번
-    // res.status(err.status || 500);
-    // res.render('error');
-
-    // 에러처리방식 2번
-    res.status(500).send(err.message);
-});
-
-export = app;
+function onListening() {
+    let addr = server.address();
+    let bind = typeof addr === "string" ? "pipe " + addr : "port " + port;
+    logger.info("서버 올라갔습니다. " + bind);
+}
