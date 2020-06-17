@@ -72,6 +72,4 @@ export default async ({ app }: { app: any }) => {
         // 에러처리방식 2번
         res.status(500).send(err.message);
     });
-
-    return app;
 };
