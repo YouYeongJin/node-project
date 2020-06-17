@@ -12,8 +12,7 @@ const checkLogin: Function = async (param: any) => {
         },
     };
     const conn = await db.getConn();
-    const queryStr: any = await db.getReadyQuery(params);
-    let userData = await db.getData(conn, queryStr);
+    let userData = await db.getData(conn, params);
     conn.release();
     return userData;
 };

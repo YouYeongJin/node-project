@@ -23,18 +23,26 @@ export default (app: any) => {
     });
 
     app.post(login + "/deleteSession", (req: any, res: any, next: NextFunction) => {
-        req.session.destroy();
-        logger.info("deleteSession" + ">> 세션삭제성공");
-        res.json({ success: true });
+        try {
+            req.session.destroy();
+            logger.info("deleteSession" + ">> 세션삭제성공");
+            res.json({ success: true });
+        } catch (err) {
+            next(err);
+        }
     });
 
     app.post(login + "/noSessionRequest", (req: any, res: any, next: NextFunction) => {
-        if (req.session.userId) {
-            logger.info("noSessionRequest" + ">> 세션 있음 O");
-            res.json({ success: true });
-        } else {
-            logger.info("noSessionRequest" + ">> 세션 없음 X");
-            res.json({ success: false });
+        try {
+            if (req.session.userId) {
+                logger.info("noSessionRequest" + ">> 세션 있음 O");
+                res.json({ success: true });
+            } else {
+                logger.info("noSessionRequest" + ">> 세션 없음 X");
+                res.json({ success: false });
+            }
+        } catch (err) {
+            next(err);
         }
     });
 };

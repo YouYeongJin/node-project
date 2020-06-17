@@ -16,8 +16,6 @@ const getConn: any = () => {
     return new Promise((resolve, reject) => {
         pool.getConnection((err: Error, connection: mysql.Connection) => {
             if (err) {
-                logger.info("-getConnection-");
-                logger.error(err);
                 reject(err);
             } else {
                 resolve(connection);
@@ -36,32 +34,27 @@ const getConn: any = () => {
  */
 const getReadyQuery = (queryParam: { nameSpace: string; sqlId: string; params: {} }) => {
     let readyQuery: String = "";
-
-    // 매퍼 로드는 처음에 한번만 하면될꺼같은데 어디다 할까
+    // 매퍼 로드
     mybatisMapper.createMapper([path.join(mapperDir, queryParam.nameSpace + ".xml")]);
-
     // 디폴트 포멧으로 설정
     const format: {} = { language: "sql", indent: "  " };
-
     // 파라메타 Namespace, SQL ID, Parameters as a arguments.
     readyQuery = mybatisMapper.getStatement(queryParam.nameSpace, queryParam.sqlId, queryParam.params, format);
-
-    logger.info("\n" + readyQuery);
     return readyQuery;
 };
 
 /**
  * @description DB에서 데이터를 가져온다
  * @param next 에러처리를 위한 next
- * @param queryString mybatis에서 받아온 queryString
+ * @param params db parameter Model
  * @param connection DB커넥션
  */
-const getData = (connection: any, queryString: string) => {
+const getData = (connection: any, params: { nameSpace: string; sqlId: string; params: {} }) => {
     return new Promise((resolve, reject) => {
+        const queryString = getReadyQuery(params);
+        logger.info("\n" + queryString);
         connection.query(queryString, (err: Error, result: {}, field: mysql.FieldInfo) => {
             if (err) {
-                logger.info("-getData-");
-                logger.error(err);
                 reject(err);
             } else {
                 resolve(result);
@@ -73,8 +66,7 @@ const getData = (connection: any, queryString: string) => {
 const asyncGetConn = (callback: Function) => {
     pool.getConnection((err: Error, connection: mysql.Connection) => {
         if (err) {
-            logger.error(err);
-            throw new Error("asyncGetConn error");
+            throw err;
         } else {
             callback(connection);
         }
@@ -83,24 +75,35 @@ const asyncGetConn = (callback: Function) => {
 
 const asyncGetReadyQuery = (queryParam: { nameSpace: string; sqlId: string; params: {} }, callback: Function) => {
     try {
-        // 매퍼 로드는 처음에 한번만 하면될꺼같은데 어디다 할까
+        // 매퍼 로드
         mybatisMapper.createMapper([path.join(mapperDir, queryParam.nameSpace + ".xml")]);
-
         // 디폴트 포멧으로 설정
         const format: any = { language: "sql", indent: "  " };
-
         // 파라메타 Namespace, SQL ID, Parameters as a arguments.
         const readyQuery = mybatisMapper.getStatement(queryParam.nameSpace, queryParam.sqlId, queryParam.params, format);
-
         if (callback) {
-            callback();
+            callback(readyQuery);
         } else {
             return readyQuery;
         }
     } catch (err) {
-        logger.error(err);
-        throw new Error("asyncGetReadyQuery error");
+        throw err;
     }
 };
 
-export { pool, getConn, getReadyQuery, getData, asyncGetConn, asyncGetReadyQuery };
+const asyncGetData = (connection: any, params: { nameSpace: string; sqlId: string; params: {} }, callback: Function) => {
+    const queryString = getReadyQuery(params);
+    logger.info("\n" + queryString);
+    connection.query(queryString, (err: Error, result: {}, field: mysql.FieldInfo) => {
+        if (err) {
+            throw err;
+        } else {
+            if (callback) {
+                callback(result);
+            } else {
+                return result;
+            }
+        }
+    });
+};
+export { pool, getConn, getReadyQuery, getData, asyncGetConn, asyncGetReadyQuery, asyncGetData };
