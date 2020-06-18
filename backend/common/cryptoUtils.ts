@@ -9,6 +9,7 @@ export default {
     },
 
     AES256Encrypt: (data: string, key: string) => {
+        key = key ? key : ENCRYPTION_KEY;
         const iv = crypto.randomBytes(IV_LENGTH);
         const cipher = crypto.createCipheriv("aes-256-cbc", Buffer.from(key), iv);
         const encrypted = cipher.update(data);
@@ -17,6 +18,7 @@ export default {
     },
 
     AES256Decrypt: (data: string, key: string) => {
+        key = key ? key : ENCRYPTION_KEY;
         const iv = crypto.randomBytes(IV_LENGTH);
         const cipher = crypto.createCipheriv("aes-256-cbc", Buffer.from(key), iv);
         const encrypted = cipher.update(data);
