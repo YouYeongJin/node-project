@@ -2,7 +2,7 @@ import express from "express";
 import * as loginLogic from "../logic/loginLogic";
 import logger from "../loaders/config/log_config/logger";
 import { NextFunction } from "express";
-import commonUtils from "../common/commonUtils";
+import objectUtils from "../common/objectUtils";
 
 const login = "/login";
 
@@ -10,7 +10,7 @@ export default (app: any) => {
     app.post(login + "/checkLogin", async (req: any, res: any, next: NextFunction) => {
         try {
             let userData = await loginLogic.checkLogin(req.body);
-            if (!commonUtils.isEmptyObject(userData)) {
+            if (!objectUtils.isEmptyObject(userData)) {
                 //세션에 추가
                 req.session.userId = userData[0].USER_ID;
                 res.send({ userData: userData[0], result: true });
