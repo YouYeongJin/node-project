@@ -25,14 +25,14 @@ export default async ({ app }: { app: any }) => {
     app.disable("x-powered-by");
 
     // 세선 없으면 튕김
-    app.use("(?!/login/checkLogin)", (req: any, res: any, next: NextFunction) => {
-        if (!req.session.userId) {
-            res.json({ code: "999", msg: "noSession" });
-            // res.status(500).send('errorrrrr');
-        } else {
-            next();
-        }
-    });
+    // app.use("(?!/login/checkLogin)", (req: any, res: any, next: NextFunction) => {
+    //     if (!req.session.userId) {
+    //         res.json({ code: "999", msg: "noSession" });
+    //         // res.status(500).send('errorrrrr');
+    //     } else {
+    //         next();
+    //     }
+    // });
 
     // 라우터 로더
     const routePath = path.join(__dirname, "/../routes");

@@ -49,7 +49,7 @@ const getReadyQuery = (queryParam: { nameSpace: string; sqlId: string; params: {
  * @param params db parameter Model
  * @param connection DB커넥션
  */
-const getData = (connection: any, params: { nameSpace: string; sqlId: string; params: {} }) => {
+const getData: any = (connection: any, params: { nameSpace: string; sqlId: string; params: {} }) => {
     return new Promise((resolve, reject) => {
         const queryString = getReadyQuery(params);
         logger.info("\n" + queryString);
@@ -91,7 +91,7 @@ const asyncGetReadyQuery = (queryParam: { nameSpace: string; sqlId: string; para
     }
 };
 
-const asyncGetData = (connection: any, params: { nameSpace: string; sqlId: string; params: {} }, callback: Function) => {
+const asyncGetData: any = (connection: any, params: { nameSpace: string; sqlId: string; params: {} }, callback: Function) => {
     const queryString = getReadyQuery(params);
     logger.info("\n" + queryString);
     connection.query(queryString, (err: Error, result: {}, field: mysql.FieldInfo) => {
