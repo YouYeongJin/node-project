@@ -1,0 +1,51 @@
+.searchBGM_div {
+    text-align: center;
+    background-color: black;
+}
+
+.searchBGM_h1 {
+    font-size: 150px;
+    color: ghostwhite;
+    background-color: black;
+}
+.searchBGM_h3 {
+    font-size: 20px;
+    color: ghostwhite;
+    background-color: black;
+}
+
+.searchBGM_input {
+    width: 50%;
+    height: 40px;
+    background-color: black;
+    color: ghostwhite;
+    font-size: large;
+    font-family: Monospace;
+    font-weight: bold;
+    text-align: center;
+    border: 1px solid ghostwhite;
+    border-radius: 4px;
+}
+
+.searchBGM_input:focus {
+    outline: 2px solid dodgerblue;
+}
+
+.searchBGM_input::placeholder {
+    color: ghostwhite;
+    font-family: Monospace;
+}
+
+.searchBGM_button {
+    width: 10%;
+    height: 45px;
+    background-color: black;
+    border: none;
+    color: ghostwhite;
+    font-size: large;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+.searchBGM_button:focus {
+    outline: none;
+}

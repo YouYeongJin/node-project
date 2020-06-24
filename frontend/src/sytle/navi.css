@@ -1,0 +1,21 @@
+.navi_div {
+    background-color: black;
+}
+
+.navi_ul {
+    background-color: black;
+}
+
+.navi_li {
+    background-color: black;
+    text-align: center;
+    margin-top: 60px;
+}
+
+.navi_link {
+    color: ghostwhite;
+    font-size: large;
+    font-family: Monospace;
+    font-weight: bold;
+    text-decoration: none;
+}

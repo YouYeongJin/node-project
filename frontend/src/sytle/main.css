@@ -1,0 +1,15 @@
+.main_div_left {
+    background-color: black;
+    width: 10%;
+    float: left;
+}
+
+.main_div_right {
+    background-color: black;
+    width: 90%;
+    float: left;
+}
+
+body {
+    background-color: black;
+}
