@@ -13,7 +13,7 @@ const App = () => {
                 <Route path="/login">
                     <SignInContainer />
                 </Route>
-                <Route path="/">
+                <Route path="/*">
                     <SearchBGMContainer />
                 </Route>
             </Switch>
