@@ -12,6 +12,7 @@ let initialState = {
 };
 
 const searchBGMAction = (state = initialState, action) => {
+    // console.log(action);
     switch (action.type) {
         case CHANGE:
             return {

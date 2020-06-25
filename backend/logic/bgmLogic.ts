@@ -14,6 +14,8 @@ export default {
         const conn = await db.getConn();
         let bgmData = await db.getData(conn, params);
         conn.release();
+
         return bgmData;
     },
+    insertBGM: async () => {},
 };

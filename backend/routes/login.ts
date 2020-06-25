@@ -5,9 +5,12 @@ import { NextFunction } from "express";
 import objectUtils from "../common/objectUtils";
 
 const login = "/login";
+const logincheckLogin = login + "/checkLogin";
+const logindeleteSession = login + "/deleteSession";
+const loginnoSessionRequest = login + "/noSessionRequest";
 
 export default (app: any) => {
-    app.post(login + "/checkLogin", async (req: any, res: any, next: NextFunction) => {
+    app.post(logincheckLogin + "/checkLogin", async (req: any, res: any, next: NextFunction) => {
         try {
             let params = req.body;
             let userData = await loginLogic.checkLogin(params);
@@ -23,7 +26,7 @@ export default (app: any) => {
         }
     });
 
-    app.post(login + "/deleteSession", (req: any, res: any, next: NextFunction) => {
+    app.post(logindeleteSession, (req: any, res: any, next: NextFunction) => {
         try {
             req.session.destroy();
             logger.info("deleteSession" + ">> 세션삭제성공");
@@ -33,7 +36,7 @@ export default (app: any) => {
         }
     });
 
-    app.post(login + "/noSessionRequest", (req: any, res: any, next: NextFunction) => {
+    app.post(loginnoSessionRequest, (req: any, res: any, next: NextFunction) => {
         try {
             if (req.session.userId) {
                 logger.info("noSessionRequest" + ">> 세션 있음 O");

@@ -15,6 +15,7 @@ export default {
         const conn = await db.getConn();
         let userData = await db.getData(conn, params);
         conn.release();
+
         return userData;
     },
 };

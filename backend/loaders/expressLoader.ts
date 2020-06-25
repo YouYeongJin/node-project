@@ -12,7 +12,7 @@ import { NextFunction } from "express";
 
 export default async ({ app }: { app: any }) => {
     app.use(morgan("dev"));
-    app.use(express.urlencoded({ extended: false }));
+    app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
     // CROS DOMAIN 허용
     app.use(cors({ origin: "http://localhost:3000", credentials: true }));

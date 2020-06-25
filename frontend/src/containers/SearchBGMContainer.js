@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import SearchBGM from "../components/SearchBGM";
 import { search, change } from "../modules/searchBGMAction";
 import { useHistory } from "react-router-dom";
-import { getAxios } from "../common/commonUtills";
+import { getAxios, getAsyncAxios } from "../common/commonUtills";
 
 const SearchBGMContainer = () => {
     const state = useSelector((state) => state.searchBGMAction);
@@ -19,15 +19,20 @@ const SearchBGMContainer = () => {
     );
 
     const onSubmit = useCallback(
-        (e) => {
-            e.preventDefault();
+        async (e) => {
+            await e.preventDefault();
             if (state.keyword.length < 1) {
                 alert("검색어를 1글자라도 입력해주세요.");
                 return;
             }
-            getAxios("post", "http://localhost:5000/bgm/list", { keyword: state.keyword }, (res) => {
-                dispatch(search(res.data.bgmData));
-            });
+            // getAxios("post", "http://localhost:5000/bgm/list", { keyword: state.keyword }, (res) => {
+            //     console.log(3);
+            //     dispatch(search(res.data.bgmData));
+            //     history.push("/main");
+            // });
+            const res = await getAsyncAxios("post", "http://localhost:5000/bgm/list", { keyword: state.keyword });
+            dispatch(search(res.data.bgmData));
+
             history.push("/main");
         },
         [state.keyword, history, dispatch]

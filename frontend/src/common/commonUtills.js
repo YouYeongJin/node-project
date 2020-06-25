@@ -29,9 +29,7 @@ const getAxios = (method, url, data, callThen, callCatch) => {
 };
 
 const getAsyncAxios = async (method, url, data) => {
-    const respone = await axios.post(url, data);
-    return respone;
-
+    return await axios({ withCredentials: true, method: method, url: url, data: data });
     // return new Promise(async (resolve, reject) => {
     //     await axios({
     //         withCredentials: true,
@@ -51,6 +49,9 @@ const getAsyncAxios = async (method, url, data) => {
     //         });
     // });
 };
+const getAsyncFileAxios = async (method, url, data) => {
+    return await axios({ withCredentials: true, method: method, url: url, headers: { "Content-Type": "multipart/form-data; charset=utf-8" }, data: data });
+};
 
 const isEmptyArray = (target) => {
     return Object.keys(target).length === 0;
@@ -62,4 +63,4 @@ const isEmptyObject = (target) => {
 
 //또다른 공통들 ....
 
-export { getAxios, getAsyncAxios, isEmptyArray, isEmptyObject };
+export { getAxios, getAsyncAxios, getAsyncFileAxios, isEmptyArray, isEmptyObject };

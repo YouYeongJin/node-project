@@ -1,0 +1,40 @@
+.insertBGM_div {
+    text-align: center;
+    background-color: black;
+}
+
+.insertBGM_input {
+    width: 50%;
+    height: 40px;
+    background-color: black;
+    color: ghostwhite;
+    font-size: large;
+    font-family: Monospace;
+    font-weight: bold;
+    text-align: center;
+    border: 1px solid ghostwhite;
+    border-radius: 4px;
+}
+
+.insertBGM_input:focus {
+    outline: 2px solid dodgerblue;
+}
+
+.insertBGM_input::placeholder {
+    color: ghostwhite;
+    font-family: Monospace;
+}
+
+.insertBGM_button {
+    width: 10%;
+    height: 45px;
+    background-color: black;
+    border: none;
+    color: ghostwhite;
+    font-size: large;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+.insertBGM_button:focus {
+    outline: none;
+}
