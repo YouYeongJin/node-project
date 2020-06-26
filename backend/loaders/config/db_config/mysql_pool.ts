@@ -7,6 +7,18 @@ import path from "path";
 const pool = mysql.createPool(mysql_config);
 const mapperDir = path.join(global.__rootPath, "logic", "mapper");
 
+pool.on("enqueue", () => {
+    logger.info("Waiting for available connection slot");
+});
+
+pool.on("acquire", (connection) => {
+    logger.info(`Connection ${connection.threadId} acquired`);
+});
+
+pool.on("release", (connection) => {
+    logger.info(`Connection ${connection.threadId} released`);
+});
+
 /**
  * @description DB로부터 커넥션을 받아 callback을 실행
  * @param next 에러처리를 위한 next
@@ -52,7 +64,9 @@ const getReadyQuery = (queryParam: { nameSpace: string; sqlId: string; params: {
 const getData: any = (connection: any, params: { nameSpace: string; sqlId: string; params: {} }) => {
     return new Promise((resolve, reject) => {
         const queryString = getReadyQuery(params);
+        logger.info("===============================");
         logger.info("\n" + queryString);
+        logger.info("===============================");
         connection.query(queryString, (err: Error, result: {}, field: mysql.FieldInfo) => {
             if (err) {
                 reject(err);
@@ -93,7 +107,9 @@ const asyncGetReadyQuery = (queryParam: { nameSpace: string; sqlId: string; para
 
 const asyncGetData: any = (connection: any, params: { nameSpace: string; sqlId: string; params: {} }, callback: Function) => {
     const queryString = getReadyQuery(params);
+    logger.info("===============================");
     logger.info("\n" + queryString);
+    logger.info("===============================");
     connection.query(queryString, (err: Error, result: {}, field: mysql.FieldInfo) => {
         if (err) {
             throw err;

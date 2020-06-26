@@ -3,12 +3,17 @@
 
 <mapper namespace="login">
   
-  <select id = "loginCheck">
+  <select id = "signIn">
     SELECT *
     FROM TB_USER
     WHERE 1 = 1
     AND USER_ID = #{USER_ID}
     AND USER_PW = #{USER_PW}
   </select>
+
+  <insert id = "signUn">
+    INSERT INTO TB_USER (USER_ID, USER_PW) 
+    VALUES (#{USER_ID}, #{USER_PW})
+  </insert>
 
 </mapper>
