@@ -14,7 +14,7 @@ const BgmList = React.memo(({ bgmList }) => bgmList.map((bgmItem, key) => <BgmIt
 const SearchBGM = ({ onChange, onSubmit, bgmList, value, onKeyPress, displayState }) => {
     return (
         <div className="searchBGM_div">
-            <div>
+            <div className="searchBGM_div">
                 <h1 className="searchBGM_h1" style={{ display: displayState }}>
                     B.G.M project
                 </h1>

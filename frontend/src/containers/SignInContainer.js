@@ -1,38 +1,57 @@
 import React, { useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SignIn from "../components/SignIn";
-import { changeEmail, changePassword, submit } from "../modules/signInAction";
+import { change, submit } from "../modules/signInAction";
 import { useHistory } from "react-router-dom";
+import { getAsyncAxios } from "../common/commonUtills";
 
 const SignInContainer = () => {
     const history = useHistory();
-    // const state = useSelector((state) => state.signInAction);
-
+    const state = useSelector((state) => state.signInAction);
     const dispatch = useDispatch();
 
-    const onChangeEmail = useCallback(
+    const onChange = useCallback(
         (e) => {
-            dispatch(changeEmail(e.target.value));
-        },
-        [dispatch]
-    );
-    const onChangePassword = useCallback(
-        (e) => {
-            dispatch(changePassword(e.target.value));
+            dispatch(change(e.target, e.target.id));
         },
         [dispatch]
     );
 
-    const onSubmit = useCallback(
-        (e) => {
-            e.preventDefault();
-            dispatch(submit());
-            history.push("/");
+    const onSignIn = useCallback(
+        async (e) => {
+            await e.preventDefault();
+
+            const res = await getAsyncAxios("post", "http://localhost:5000/login/signIn", state);
+
+            if (res.data.result) {
+                dispatch(submit());
+                history.push("/main");
+            } else {
+                alert("로그인 실패");
+            }
         },
-        [history, dispatch]
+        [state, history, dispatch]
     );
 
-    return <SignIn onChangeEmail={onChangeEmail} onChangePassword={onChangePassword} onSubmit={onSubmit} />;
+    const onKeyPress = (e) => {
+        if (e.key === "Enter") onSignIn(e);
+    };
+
+    const onSignUp = () => {
+        history.push("/signup");
+    };
+
+    const onClickCheckSession = useCallback(async (e) => {
+        await e.preventDefault();
+        const res = await getAsyncAxios("post", "http://localhost:5000/login/noSessionRequest", state);
+    });
+
+    const onClickDeleteSession = useCallback(async (e) => {
+        await e.preventDefault();
+        const res = await getAsyncAxios("post", "http://localhost:5000/login/deleteSession", state);
+    });
+
+    return <SignIn onChange={onChange} onSignIn={onSignIn} onSignUp={onSignUp} onKeyPress={onKeyPress} onClickCheckSession={onClickCheckSession} onClickDeleteSession={onClickDeleteSession} />;
 };
 
 export default SignInContainer;

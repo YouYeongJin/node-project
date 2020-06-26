@@ -36,6 +36,8 @@ const insertBGMAction = (state = initialState, action) => {
                         ...state,
                         file: action.payload.data.files[0],
                     };
+                default:
+                    break;
             }
 
         case INSERT:

@@ -1,16 +1,16 @@
-export const SUBMIT = "signIn/SUBMIT";
-export const CHANGE = "signIn/CHANGE";
+// export const SUBMIT = "signIn/SUBMIT";
+export const CHANGE = "signUp/CHANGE";
 
-export const submit = () => ({ type: SUBMIT });
+// export const submit = () => ({ type: SUBMIT });
 export const change = (data, type) => ({ type: CHANGE, payload: { data, type } });
 
 let initialState = {
     eMail: "",
     password: "",
-    loginState: false,
+    password2: "",
 };
 
-const signInAction = (state = initialState, action) => {
+const signUpAction = (state = initialState, action) => {
     switch (action.type) {
         case CHANGE:
             switch (action.payload.type) {
@@ -24,17 +24,22 @@ const signInAction = (state = initialState, action) => {
                         ...state,
                         password: action.payload.data.value,
                     };
+                case "password2":
+                    return {
+                        ...state,
+                        password2: action.payload.data.value,
+                    };
                 default:
                     break;
             }
-        case SUBMIT:
-            return {
-                ...state,
-                loginState: true,
-            };
+        // case SUBMIT:
+        //     return {
+        //         ...state,
+        //         loginState: true,
+        //     };
         default:
             return state;
     }
 };
 
-export default signInAction;
+export default signUpAction;

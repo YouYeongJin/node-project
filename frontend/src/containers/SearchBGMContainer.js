@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import SearchBGM from "../components/SearchBGM";
 import { search, change } from "../modules/searchBGMAction";
 import { useHistory } from "react-router-dom";
-import { getAxios, getAsyncAxios } from "../common/commonUtills";
+import { getAsyncAxios } from "../common/commonUtills";
 
 const SearchBGMContainer = () => {
     const state = useSelector((state) => state.searchBGMAction);

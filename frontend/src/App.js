@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import SearchBGMContainer from "./containers/SearchBGMContainer";
 import SignInContainer from "./containers/SignInContainer";
 import MainContainer from "./containers/MainContainer";
+import SignUpContainer from "./containers/SignUpContainer";
 const App = () => {
     return (
         <BrowserRouter>
@@ -10,8 +11,11 @@ const App = () => {
                 <Route path="/main">
                     <MainContainer />
                 </Route>
-                <Route path="/login">
+                <Route path="/signin">
                     <SignInContainer />
+                </Route>
+                <Route path="/signup">
+                    <SignUpContainer />
                 </Route>
                 <Route path="/*">
                     <SearchBGMContainer />

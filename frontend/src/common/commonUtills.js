@@ -30,27 +30,6 @@ const getAxios = (method, url, data, callThen, callCatch) => {
 
 const getAsyncAxios = async (method, url, data) => {
     return await axios({ withCredentials: true, method: method, url: url, data: data });
-    // return new Promise(async (resolve, reject) => {
-    //     await axios({
-    //         withCredentials: true,
-    //         method: method,
-    //         url: url,
-    //         data: data,
-    //     })
-    //         .then((res) => {
-    //             if (res.data.code === "999") {
-    //                 alert("세션이 없습니다 로그인을 해야합니다.");
-    //             } else {
-    //                 resolve(res);
-    //             }
-    //         })
-    //         .catch((err) => {
-    //             reject(err);
-    //         });
-    // });
-};
-const getAsyncFileAxios = async (method, url, data) => {
-    return await axios({ withCredentials: true, method: method, url: url, headers: { "Content-Type": "multipart/form-data; charset=utf-8" }, data: data });
 };
 
 const isEmptyArray = (target) => {
@@ -63,4 +42,4 @@ const isEmptyObject = (target) => {
 
 //또다른 공통들 ....
 
-export { getAxios, getAsyncAxios, getAsyncFileAxios, isEmptyArray, isEmptyObject };
+export { getAxios, getAsyncAxios, isEmptyArray, isEmptyObject };
