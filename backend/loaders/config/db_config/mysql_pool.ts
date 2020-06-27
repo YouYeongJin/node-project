@@ -11,11 +11,11 @@ pool.on("enqueue", () => {
     logger.info("Waiting for available connection slot");
 });
 
-pool.on("acquire", (connection) => {
+pool.on("acquire", connection => {
     logger.info(`Connection ${connection.threadId} acquired`);
 });
 
-pool.on("release", (connection) => {
+pool.on("release", connection => {
     logger.info(`Connection ${connection.threadId} released`);
 });
 
