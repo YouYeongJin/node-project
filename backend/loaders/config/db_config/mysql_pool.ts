@@ -4,20 +4,7 @@ import mybatisMapper from "mybatis-mapper";
 import logger from "../log_config/logger";
 import path from "path";
 
-const pool = mysql.createPool(mysql_config);
 const mapperDir = path.join(global.__rootPath, "logic", "mapper");
-
-pool.on("enqueue", () => {
-    logger.info("Waiting for available connection slot");
-});
-
-pool.on("acquire", connection => {
-    logger.info(`Connection ${connection.threadId} acquired`);
-});
-
-pool.on("release", connection => {
-    logger.info(`Connection ${connection.threadId} released`);
-});
 
 /**
  * @description DB로부터 커넥션을 받아 callback을 실행
@@ -26,7 +13,7 @@ pool.on("release", connection => {
  */
 const getConn: any = () => {
     return new Promise((resolve, reject) => {
-        pool.getConnection((err: Error, connection: mysql.Connection) => {
+        global.__pool.getConnection((err: Error, connection: mysql.Connection) => {
             if (err) {
                 reject(err);
             } else {
@@ -78,7 +65,7 @@ const getData: any = (connection: any, params: { nameSpace: string; sqlId: strin
 };
 
 const asyncGetConn = (callback: Function) => {
-    pool.getConnection((err: Error, connection: mysql.Connection) => {
+    global.__pool.getConnection((err: Error, connection: mysql.Connection) => {
         if (err) {
             throw err;
         } else {
@@ -122,4 +109,4 @@ const asyncGetData: any = (connection: any, params: { nameSpace: string; sqlId: 
         }
     });
 };
-export { pool, getConn, getReadyQuery, getData, asyncGetConn, asyncGetReadyQuery, asyncGetData };
+export { getConn, getReadyQuery, getData, asyncGetConn, asyncGetReadyQuery, asyncGetData };

@@ -6,30 +6,25 @@ import { useHistory } from "react-router-dom";
 import { getAsyncAxios } from "../common/commonUtills";
 
 const SearchBGMContainer = () => {
-    const state = useSelector((state) => state.searchBGMAction);
+    const state = useSelector(state => state.searchBGMAction);
     const history = useHistory();
 
     const dispatch = useDispatch();
 
     const onChange = useCallback(
-        (e) => {
+        e => {
             dispatch(change(e.target.value));
         },
         [dispatch]
     );
 
     const onSubmit = useCallback(
-        async (e) => {
+        async e => {
             await e.preventDefault();
             if (state.keyword.length < 1) {
                 alert("검색어를 1글자라도 입력해주세요.");
                 return;
             }
-            // getAxios("post", "http://localhost:5000/bgm/list", { keyword: state.keyword }, (res) => {
-            //     console.log(3);
-            //     dispatch(search(res.data.bgmData));
-            //     history.push("/main");
-            // });
             const res = await getAsyncAxios("post", "http://localhost:5000/bgm/list", { keyword: state.keyword });
             dispatch(search(res.data.bgmData));
 
@@ -38,7 +33,7 @@ const SearchBGMContainer = () => {
         [state.keyword, history, dispatch]
     );
 
-    const onKeyPress = (e) => {
+    const onKeyPress = e => {
         if (e.key === "Enter") onSubmit(e);
     };
 
