@@ -4,6 +4,8 @@ import express from "express";
 import loaders from "./loaders/index";
 import debug from "debug";
 import http, { Server } from "http";
+import os from "os";
+import cluster from "cluster";
 import logger from "./loaders/config/log_config/logger";
 
 let port: string | number;
@@ -21,7 +23,6 @@ const serverStart = async () => {
     server.on("listening", onListening);
     server.listen(port);
 };
-serverStart();
 
 function normalizePort(val: any) {
     let port = parseInt(val, 10);
@@ -57,4 +58,18 @@ function onListening() {
     let addr = server.address();
     let bind = typeof addr === "string" ? "pipe " + addr : "port " + port;
     logger.info("서버 올라갔습니다. " + bind);
+}
+
+//서버 시작부
+
+const cpuLength: number = os.cpus().length;
+
+if (cluster.isMaster) {
+    logger.info("cluster 마스터");
+    for (let index = 0; index < cpuLength; index++) {
+        cluster.fork();
+    }
+} else {
+    logger.info("cluster slave 생성 PID = " + process.pid);
+    serverStart();
 }
