@@ -63,7 +63,6 @@ function onListening() {
 //서버 시작부
 
 const cpuLength: number = os.cpus().length;
-
 if (cluster.isMaster) {
     logger.info("cluster 마스터");
     for (let index = 0; index < cpuLength; index++) {
@@ -73,3 +72,5 @@ if (cluster.isMaster) {
     logger.info("cluster slave 생성 PID = " + process.pid);
     serverStart();
 }
+
+// serverStart();
