@@ -28,17 +28,15 @@ export default {
     signUp: async (param: any) => {
         const conn = await db.getConn();
         try {
-            let params = {
+            await conn.beginTransaction();
+            let res = await db.getData(conn, {
                 nameSpace: "login",
                 sqlId: "signUn",
                 params: {
                     USER_ID: param.eMail,
                     USER_PW: param.password
                 }
-            };
-
-            await conn.beginTransaction();
-            let res = await db.getData(conn, params);
+            });
             if (res.affectedRows > 0) {
                 conn.commit();
                 return { success: true };
