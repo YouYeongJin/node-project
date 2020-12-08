@@ -6,9 +6,7 @@ import path from "path";
 const mapperDir = path.join(global.__rootPath, "mysql_mapper");
 
 /**
- * @description DB로부터 커넥션을 받아 callback을 실행
- * @param next 에러처리를 위한 next
- * @param callback connection이 담긴 callback
+ * @description DB로부터 커넥션을 받아온다
  */
 const getConn: any = () => {
     return new Promise((resolve, reject) => {
@@ -24,13 +22,9 @@ const getConn: any = () => {
 
 /**
  * @description mybatis 에서 세팅한 queryString을 받아온다
- * @param next 에러처리를 위한 next
- * @param queryParam ---오브젝트 타입--
- * nameSpace = XML의 네임스페이스
- * sqlId = XML의 쿼리명
- * params = 쿼리 내에서 사용될 parameters
+ * @param queryParam nameSpace = XML의 네임스페이스, sqlId = XML의 쿼리명, params = 쿼리 내에서 사용될 parameters
  */
-const getReadyQuery = (queryParam: { nameSpace: string; sqlId: string; params: {} }) => {
+const getReadyQuery: any = (queryParam: { nameSpace: string; sqlId: string; params: {} }) => {
     let readyQuery: String = "";
     // 매퍼 로드
     mybatisMapper.createMapper([path.join(mapperDir, queryParam.nameSpace + ".xml")]);
@@ -43,7 +37,6 @@ const getReadyQuery = (queryParam: { nameSpace: string; sqlId: string; params: {
 
 /**
  * @description DB에서 데이터를 가져온다
- * @param next 에러처리를 위한 next
  * @param params db parameter Model
  * @param connection DB커넥션
  */
@@ -63,7 +56,11 @@ const getData: any = (connection: any, params: { nameSpace: string; sqlId: strin
     });
 };
 
-const asyncGetConn = (callback: Function) => {
+/**
+ * @description DB로부터 커넥션을 받아 callback을 실행
+ * @param callback connection이 담긴 callback
+ */
+const asyncGetConn: Function = (callback: Function) => {
     global.__pool.getConnection((err: Error, connection: mysql.Connection) => {
         if (err) {
             throw err;
@@ -73,7 +70,12 @@ const asyncGetConn = (callback: Function) => {
     });
 };
 
-const asyncGetReadyQuery = (queryParam: { nameSpace: string; sqlId: string; params: {} }, callback: Function) => {
+/**
+ * @description mybatis 에서 세팅한 queryString을 받아온다
+ * @param queryParam nameSpace = XML의 네임스페이스, sqlId = XML의 쿼리명, params = 쿼리 내에서 사용될 parameters
+ * @param callback query가 담긴 callback
+ */
+const asyncGetReadyQuery: Function = (queryParam: { nameSpace: string; sqlId: string; params: {} }, callback: Function) => {
     try {
         // 매퍼 로드
         mybatisMapper.createMapper([path.join(mapperDir, queryParam.nameSpace + ".xml")]);
@@ -91,7 +93,13 @@ const asyncGetReadyQuery = (queryParam: { nameSpace: string; sqlId: string; para
     }
 };
 
-const asyncGetData: any = (connection: any, params: { nameSpace: string; sqlId: string; params: {} }, callback: Function) => {
+/**
+ * @description DB에서 데이터를 가져온다
+ * @param params db parameter Model
+ * @param connection DB커넥션
+ * @param callback data가 담긴 callback
+ */
+const asyncGetData: Function = (connection: any, params: { nameSpace: string; sqlId: string; params: {} }, callback: Function) => {
     const queryString = getReadyQuery(params);
     logger.info("===============================");
     logger.info("\n" + queryString);
