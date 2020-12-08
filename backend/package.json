@@ -5,7 +5,7 @@
     "scripts": {
         "start": "node ./bin/www",
         "build": "tsc && cp -r ./node_modules ../build/backend && cp -r ./*mapper ../build/backend",
-        "win-build": "tsc && xcopy node_modules ..\\build\\backend\\node_modules /e /y /i && xcopy logic\\mapper ..\\build\\backend\\logic\\mapper /e /y /i"
+        "win-build": "tsc && xcopy node_modules ..\\build\\backend\\node_modules /e /y /i && xcopy *mapper ..\\build\\backend /e /y /i"
     },
     "dependencies": {
         "@types/connect-redis": "0.0.13",
