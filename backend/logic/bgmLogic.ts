@@ -1,4 +1,4 @@
-import * as db from "../loaders/config/db_config/mysql_pool";
+import * as db from "../loaders/config/db_config/mysql_mybatis";
 import logger from "../loaders/config/log_config/logger";
 
 export default {
@@ -8,8 +8,8 @@ export default {
             nameSpace: "bgm",
             sqlId: "getBgmList",
             params: {
-                keyword: param.keyword,
-            },
+                keyword: param.keyword
+            }
         };
         const conn = await db.getConn();
         let bgmData = await db.getData(conn, params);
@@ -17,5 +17,5 @@ export default {
 
         return bgmData;
     },
-    insertBGM: async () => {},
+    insertBGM: async () => {}
 };

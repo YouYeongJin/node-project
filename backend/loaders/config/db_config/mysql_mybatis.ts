@@ -1,10 +1,9 @@
 import mysql from "mysql";
-import mysql_config from "./mysql_config";
 import mybatisMapper from "mybatis-mapper";
 import logger from "../log_config/logger";
 import path from "path";
 
-const mapperDir = path.join(global.__rootPath, "logic", "mapper");
+const mapperDir = path.join(global.__rootPath, "mysql_mapper");
 
 /**
  * @description DB로부터 커넥션을 받아 callback을 실행
